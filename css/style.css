@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;600;700;800;900&display=swap');
+#map {
+  cursor: pointer;
+}
+.map-container {
+  width: 720px;
+  height: 720px;
+}
+
+svg {
+  width: 95%;
+  height: 95%;
+}
+body {
+    overflow-x: hidden;
+    font-family: 'Roboto', sans-serif !important;
+}
+#content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#loading {
+    text-align: center;
+}
+path {
+    fill: rgba(var(--mdb-primary-rgb));
+    opacity:0.7;
+}
+path:hover{
+  opacity: 1;
+}
