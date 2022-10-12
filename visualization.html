@@ -20,12 +20,72 @@
         </div>
     </nav>
     <h1 class="loading text-center"><img src="img/loader.gif" alt="" srcset=""></h1>
+    <div class="container" id="content" style="display: none;">
+        <br>
+        <a href="/"><div class="btn btn-primary"><< Regresar a Inicio</div></a>
+        <hr>
+        <h1 id="selectedDept" class="pb-6">COVID-19 - </h1>
+        <!--Town selector-->
+        <div class="row">
+            <div class="col-10">
+                <select name="townSelect" class="form-control" id="townSelect">
+                    <option value="0">Departamento en general</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <div class="btn btn-primary mb-3" id="selectBtn">Seleccionar</div>
+            </div>
+        </div>
+        <!--Covid case stats-->
+        <div class="row">
+            <div class="col">
+                <div class="h-100 p-5 bg-primary text-light rounded-3">
+                    <h3>Casos reportados</h3>
+                    <p id="reported"></p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="h-100 p-5 bg-info text-light rounded-3">
+                    <h3>Casos activos</h3>
+                    <p id="active"></p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="h-100 p-5 bg-success text-light rounded-3">
+                    <h3>Recuperados</h3>
+                    <p id="recovered"></p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="h-100 p-5 bg-danger text-light rounded-3">
+                    <h3>Fallecidos</h3>
+                    <p id="deceased"></p>
+                </div>
+            </div>
+        </div>
+        <!--Cases by year and sex-->
+        <h3>Numero de casos por año:</h3>
+        <div id="casesByYear"></div>
+        <div class="row">
+            <div class="col-6">
+                <h3>Casos por sexo:</h3>
+                <div id="casesBySex"></div>
+            </div>
+            <div class="col-6">
+                <h3>Distribución por tipo de caso:</h3>
+                <div id="casesByType"></div>
+            </div>
+        </div>
+        <h3>Casos por muncipio</h3>
+        <div id="casesByTown"></div>
+    </div>
     <hr>
     <p class="text-center">Datos de <br>
         <a href="https://www.ins.gov.co/" target="_blank">
             <img src="img/logo_ins.png" alt="" srcset="">
         </a>
     </p>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="js/visualization.js"></script>
 </body>

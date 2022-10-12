@@ -20,18 +20,17 @@
         </div>
     </nav>
     <h1 class="loading text-center"><img src="img/loader.gif" alt="" srcset=""></h1>
-    <div class="container" id="content" style="display: none;">
-
-        <form class="row" id="deptSelection">
-            <div class="col-auto">
+    <div class="container map-container" id="content" style="display: none;">
+        <div class="row" id="deptSelection">
+            <div class="col-10">
                 <select class="form-control" id="selectDept" required>
                     <option value="0">Seleccione departamento aqui o en el mapa:</option>
                 </select>
-                <p style="text-align: center;">
-                <div class="btn btn-primary mb-3" id="continueBtn">Continuar</div>
-                </p>
             </div>
-        </form>
+            <div class="col-2">
+                <div class="btn btn-primary mb-3" style="z-index: 100;" id="continueBtn">Continuar</div>
+            </div>
+        </div>
         <!--Colombian Map-->
         <div class="map-container">
             <svg width="612.82184" height="693.68036" xmlns="http://www.w3.org/2000/svg" id="map">
