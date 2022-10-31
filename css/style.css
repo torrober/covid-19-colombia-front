@@ -23,10 +23,10 @@ body {
 #loading {
     text-align: center;
 }
-path {
+.map-container path {
     fill: rgba(var(--mdb-primary-rgb));
     opacity:0.7;
 }
-path:hover{
+.map-container path:hover{
   opacity: 1;
 }

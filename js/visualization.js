@@ -13,7 +13,8 @@ window.onload = () => {
           title: 'Error!',
           text: data.error,
           icon: 'error',
-          confirmButtonText: 'OK'
+          showConfirmButton: false,
+          allowOutsideClick: false
         })
       }
       else {
@@ -21,8 +22,6 @@ window.onload = () => {
         let dept = capitalize(getDeptName(DIVIPOLA_CODE).toLowerCase());
         document.title += " - " + dept;
         document.querySelector("#selectedDept").innerText += dept;
-        $('#content').show()
-        $('.loading').hide()
         showData();
       }
     })
@@ -36,71 +35,58 @@ const populateCombobox = (data) => {
   }
 }
 const showData = () => {
-  covidStats("6,308,087", "1,901", "6,135,815", "141,807");
-  covidStatsByYear([18, 28, 47, 57, 77])
-  covidBySex([30, 20])
-  covidByCaseType([6308087, 1901, 6135815, 141807]);
+  let params = new URLSearchParams(window.location.search);
+  const DIVIPOLA_CODE = params.get('code');
+  console.log(document.querySelector("#munSelect").value)
   if (document.querySelector("#munSelect").value == 0) {
+    covidAPI.getInfoMun(DIVIPOLA_CODE,false).then((data) => {
+      if (data.response == "failed") {
+        Swal.fire({
+          title: 'Error!',
+          text: data.error,
+          icon: 'error',
+          showConfirmButton: false,
+          allowOutsideClick: false
+        })
+      }
+      else {
+        covidStats(data.content[0].recuperados, data.content[0].CasosRegistrados, data.content[0].muertos);
+        covidStatsByYear([data.content[0].casos2020, data.content[0].casos2021, data.content[0].casos2022])
+        covidBySex([data.content[0].CasosMasculinos/data.content[0].CasosRegistrados, data.content[0].CasosFemeninos/data.content[0].CasosRegistrados])
+        covidByCaseType([data.content[0].recuperados, data.content[0].CasosRegistrados, data.content[0].muertos]);
+        $('#content').show()
+        $('.loading').hide()
+      }
+    })
     $("#casesTownText").show();
-    covidByTown();
     $('#casesByTown').show();
   } else {
-    $("#casesTownText").hide();
-    $('#casesByTown').hide();
+    $('#content').hide()
+    $('.loading').show()
+    covidAPI.getInfoMun(document.querySelector("#munSelect").value,true).then((data) => {
+      if (data.response == "failed") {
+        Swal.fire({
+          title: 'Error!',
+          text: data.error,
+          icon: 'error',
+          showConfirmButton: false,
+          allowOutsideClick: false
+        })
+      }
+      else {
+        covidStats(data.content[0].recuperados, data.content[0].CasosRegistrados, data.content[0].muertos);
+        covidStatsByYear([data.content[0].casos2020, data.content[0].casos2021, data.content[0].casos2022])
+        covidBySex([data.content[0].CasosMasculinos/data.content[0].CasosRegistrados, data.content[0].CasosFemeninos/data.content[0].CasosRegistrados])
+        covidByCaseType([data.content[0].recuperados, data.content[0].CasosRegistrados, data.content[0].muertos]);
+        $('#content').show()
+        $('.loading').hide()
+      }
+    })
   }
 }
 
 document.querySelector("#selectBtn").addEventListener("click", showData)
 
-const covidByTown = () => {
-
-  var options = {
-    series: [{
-      data: [21, 22, 10, 28, 16, 21, 13, 30]
-    }],
-    chart: {
-      height: 350,
-      type: 'bar',
-      events: {
-        click: function (chart, w, e) {
-          // console.log(chart, w, e)
-        }
-      }
-    },
-    plotOptions: {
-      bar: {
-        columnWidth: '45%',
-        distributed: true,
-      }
-    },
-    dataLabels: {
-      enabled: false
-    },
-    legend: {
-      show: false
-    },
-    xaxis: {
-      categories: [
-        ['John', 'Doe'],
-        ['Joe', 'Smith'],
-        ['Jake', 'Williams'],
-        'Amber',
-        ['Peter', 'Brown'],
-        ['Mary', 'Evans'],
-        ['David', 'Wilson'],
-        ['Lily', 'Roberts'],
-      ],
-      labels: {
-        style: {
-          fontSize: '12px'
-        }
-      }
-    }
-  };
-
-  var chart = new ApexCharts(document.querySelector("#casesByTown"), options);
-  chart.render();
-}
 const covidByCaseType = (data) => {
   var options = {
     series: [{
@@ -120,7 +106,7 @@ const covidByCaseType = (data) => {
       enabled: false
     },
     xaxis: {
-      categories: ['Reportados', 'Activos', 'Recuperados', 'Fallecidos'],
+      categories: ['Reportados', 'Recuperados', 'Fallecidos'],
     }
   };
 
@@ -128,12 +114,15 @@ const covidByCaseType = (data) => {
   chart.render();
 }
 const covidBySex = (data) => {
-
+  console.log(data)
   var options = {
     series: data,
+    labels: ['Masculino', 'Femenino'],
     chart: {
       type: 'donut',
     },
+    fill: { colors: ['#3b71ca', '#E91E63'] },
+    colors: ['#3b71ca', '#E91E63'],
     responsive: [{
       breakpoint: 480,
       options: {
@@ -161,15 +150,14 @@ const covidStatsByYear = (data) => {
     series: [{
       data: data
     }],
-    yaxis: {
-      opposite: false,
+    xaxis: {
+      categories: ['2020', '2021', '2022'],
     }
   })
   myChart.render();
 }
-const covidStats = (reported, active, recovered, deceased) => {
+const covidStats = (reported, recovered, deceased) => {
   document.querySelector("#reported").innerText = reported;
-  document.querySelector("#active").innerText = active;
   document.querySelector("#recovered").innerText = recovered;
   document.querySelector("#deceased").innerText = deceased
 }
